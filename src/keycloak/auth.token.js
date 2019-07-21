@@ -1,23 +1,22 @@
 const jwt = require('jwt-simple');
 const forbidden = require('./forbidden');
-
-const SECRET = 'Th3B1fR0sT1sCL0S3dbYY0UrF4th3RS0rD3rS';
+const config = require('../config');
 
 module.exports = () => (req, res, next) => {
   const token = req.headers['auth-token'];
   if (token) {
     try {
-      const decoded = jwt.decode(token, SECRET);
+      const decoded = jwt.decode(token, config.secret());
       if (!decoded.user_id) {
-        forbidden(res);
+        forbidden(res, 'You need to send an user_id to this request');
       } else {
         req.payload = decoded;
         next();
       }
     } catch (e) {
-      forbidden(res);
+      forbidden(res, 'Signature verification failed');
     }
   } else {
-    forbidden(res);
+    forbidden(res, 'Auth token not prensent in header');
   }
 };

@@ -1,11 +1,10 @@
 const Keycloak = require('keycloak-connect');
-const config = require('./keycloak');
-const environment = require('./environment');
+const config = require('../config');
 
-const keycloak = new Keycloak({}, config);
+const keycloak = new Keycloak({}, config.keycloak);
 
 module.exports = (value) => {
-  if (environment.isProduction(value)) {
+  if (config.isProduction(value)) {
     return keycloak.middleware();
   }
   return (req, res, next) => next();

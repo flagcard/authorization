@@ -1,6 +1,6 @@
 const sandbox = require('sinon').createSandbox();
 const { assert } = require('chai');
-const environment = require('../src/keycloak/environment');
+const config = require('../src/config');
 const { authorization } = require('../index');
 
 describe('Authorization', () => {
@@ -9,9 +9,9 @@ describe('Authorization', () => {
     assert.equal(response.length, 3);
   });
   it('should call correction function when production environment', () => {
-    sandbox.stub(environment, 'isProduction').returns(true);
+    sandbox.stub(config, 'isProduction').returns(true);
     const response = authorization();
     assert.equal(response.length, 5);
-    environment.isProduction.restore();
+    config.isProduction.restore();
   });
 });

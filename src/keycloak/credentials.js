@@ -1,9 +1,9 @@
 const jwt = require('jwt-decode');
-const environment = require('./environment');
+const config = require('../config');
 const forbidden = require('./forbidden');
 
 module.exports = () => (req, res, next) => {
-  if (environment.isProduction()) {
+  if (config.isProduction()) {
     const authorization = req.headers.authorization || req.headers.Authorization;
     if (authorization) {
       const token = authorization.substring(7);
@@ -11,7 +11,7 @@ module.exports = () => (req, res, next) => {
       req.user_id = decoded.sub;
       next();
     } else {
-      forbidden(res);
+      forbidden(res, 'Bearer Authotization not prensent in header');
     }
   } else {
     req.user_id = 'e9fd456a-599c-4942-b249-fc457bb4b278';
