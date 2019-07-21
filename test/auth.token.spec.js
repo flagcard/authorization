@@ -1,5 +1,6 @@
 const sinon = require('sinon');
 const { expect } = require('chai');
+const Token = require('../src/builder/token');
 const { authToken } = require('../index');
 const config = require('../src/config');
 
@@ -26,24 +27,26 @@ describe('Auth Token', () => {
     expect(res.status.called).to.be.equal(true);
     expect(res.status.getCall(0).args[0]).to.be.equal(403);
     expect(json.called).to.be.equal(true);
-    expect(json.getCall(0).args[0]).to.have.property('error', 'Auth token not prensent in header');
+    expect(json.getCall(0).args[0]).to.have.property('error', 'Authorization token is not prensent in header');
     expect(res.setHeader.called).to.be.equal(true);
     expect(next.notCalled).to.be.equal(true);
   });
   it('should return 403 if decoded token has no user_id', () => {
-    req.headers['auth-token'] = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjb21wYW55X2lkIjoiYTJhYTQzZGItZWVjZi00YTIzLTk0OTItYjcwZjRlMTczMjNiIn0.Hoq1tQrs9YhyJ7Pxo3Hxa7IWUaWx14fkGMTuD_OSE38';
+    const token = new Token({ exp: 0 });
+    req.headers.authorization = token.encode(config.secret());
 
     authToken()(req, res, next);
 
     expect(res.status.called).to.be.equal(true);
     expect(res.status.getCall(0).args[0]).to.be.equal(403);
     expect(json.called).to.be.equal(true);
-    expect(json.getCall(0).args[0]).to.have.property('error', 'You need to send an user_id to this request');
+    expect(json.getCall(0).args[0]).to.have.property('error', 'It is highly recommended to inform these fields: sub and exp');
     expect(res.setHeader.called).to.be.equal(true);
     expect(next.notCalled).to.be.equal(true);
   });
   it('should return 403 if a token token was decoded with another secret', () => {
-    req.headers['auth-token'] = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiMjVlMWE1MjQtMDFlYi00YzQyLWIzYjItODYyODBjNWU2MWNhIiwiY29tcGFueV9pZCI6ImEyYWE0M2RiLWVlY2YtNGEyMy05NDkyLWI3MGY0ZTE3MzIzYiJ9.fORMdAPx8037hHjld3ZjHZoJMXnZvP8RlwiRtgMup-k';
+    const token = new Token({ sub: 'b36d21fe-123f-4258-86d4-ed063b74414c', exp: 0 });
+    req.headers.Authorization = token.encode('another-secret');
 
     authToken()(req, res, next);
 
@@ -55,7 +58,11 @@ describe('Auth Token', () => {
     expect(next.notCalled).to.be.equal(true);
   });
   it('req should have payload property', () => {
-    req.headers['auth-token'] = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiMjVlMWE1MjQtMDFlYi00YzQyLWIzYjItODYyODBjNWU2MWNhIiwiY29tcGFueV9pZCI6ImEyYWE0M2RiLWVlY2YtNGEyMy05NDkyLWI3MGY0ZTE3MzIzYiJ9.3GjMH_0X1JkEr_2aVQgPo47yU_0OkYiCaai8f2q5HHY';
+    const token = Token.builder()
+      .sub('25e1a524-01eb-4c42-b3b2-86280c5e61ca')
+      .payload({ company_id: 'a2aa43db-eecf-4a23-9492-b70f4e17323b' })
+      .build();
+    req.headers.Authorization = token.encode(config.secret());
 
     authToken()(req, res, next);
 

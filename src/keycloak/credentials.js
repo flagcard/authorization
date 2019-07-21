@@ -11,7 +11,7 @@ module.exports = () => (req, res, next) => {
       req.user_id = decoded.sub;
       next();
     } else {
-      forbidden(res, 'Bearer Authotization not prensent in header');
+      forbidden(res, 'Bearer Authorization is not prensent in header');
     }
   } else {
     req.user_id = 'e9fd456a-599c-4942-b249-fc457bb4b278';
