@@ -1,12 +1,6 @@
 const jwt = require('jwt-decode');
-const http_status = require('http-status');
 const environment = require('./environment');
-
-const forbidden = (res) => {
-  res.statusCode = http_status.FORBIDDEN;
-  res.setHeader('Content-Length', '0');
-  res.end();
-};
+const forbidden = require('./forbidden');
 
 module.exports = () => (req, res, next) => {
   if (environment.isProduction()) {
