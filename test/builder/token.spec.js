@@ -1,6 +1,6 @@
 const { expect } = require('chai');
 const moment = require('moment');
-const Token = require('../../src/builder/token');
+const { Token } = require('../../index');
 
 describe('Token Builder', () => {
   it('should create correct token', () => {

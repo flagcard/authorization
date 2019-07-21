@@ -1,7 +1,6 @@
 const sinon = require('sinon');
 const { expect } = require('chai');
-const Token = require('../src/builder/token');
-const { authToken } = require('../index');
+const { Token, authToken } = require('../index');
 const config = require('../src/config');
 
 describe('Auth Token', () => {
