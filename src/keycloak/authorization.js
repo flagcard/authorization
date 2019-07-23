@@ -3,8 +3,8 @@ const config = require('../config');
 
 const keycloak = new Keycloak({}, config.keycloak);
 
-module.exports = (value) => {
-  if (config.isProduction(value)) {
+module.exports = () => {
+  if (config.isProduction()) {
     return keycloak.middleware();
   }
   return (req, res, next) => next();
