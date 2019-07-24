@@ -5,10 +5,12 @@ const isProduction = () => environment === 'production';
 
 const secret = () => {
   if (isProduction()) {
-    if (!process.env.AUTH_SECRET) throw new Error('You must define an environment variable for secrets');
+    if (!process.env.AUTH_SECRET) {
+      throw new Error('You must define an environment variable for secrets');
+    }
     return process.env.AUTH_SECRET;
   }
-  return environment;
+  return process.env.AUTH_SECRET || environment;
 };
 
 module.exports = {
