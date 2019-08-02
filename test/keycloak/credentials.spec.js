@@ -1,8 +1,8 @@
 const sandbox = require('sinon').createSandbox();
 const sinon = require('sinon');
 const { expect } = require('chai');
-const config = require('../src/config');
-const { credentials } = require('../index');
+const config = require('../../src/config');
+const { credentials } = require('../..');
 
 describe('Credentials', () => {
   const req = {};
@@ -35,7 +35,7 @@ describe('Credentials', () => {
     expect(res.status.called).to.be.equal(true);
     expect(res.status.getCall(0).args[0]).to.be.equal(403);
     expect(json.called).to.be.equal(true);
-    expect(json.getCall(0).args[0]).to.have.property('error', 'Bearer Authotization not prensent in header');
+    expect(json.getCall(0).args[0]).to.have.property('error', 'Bearer Authorization is not prensent in header');
     expect(res.setHeader.called).to.be.equal(true);
     expect(next.notCalled).to.be.equal(true);
   });

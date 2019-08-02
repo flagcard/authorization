@@ -1,7 +1,7 @@
 const sinon = require('sinon');
 const { expect } = require('chai');
-const { Token, authToken } = require('../index');
-const config = require('../src/config');
+const { Token, authToken } = require('../..');
+const config = require('../../src/config');
 
 describe('Auth Token', () => {
   const req = {};
@@ -21,6 +21,8 @@ describe('Auth Token', () => {
     config.secret.restore();
   });
   it('should return 403 if no auth-token provider', () => {
+    sinon.createSandbox().stub(config, 'isProduction').returns(true);
+
     authToken()(req, res, next);
 
     expect(res.status.called).to.be.equal(true);
@@ -29,8 +31,10 @@ describe('Auth Token', () => {
     expect(json.getCall(0).args[0]).to.have.property('error', 'Authorization token is not prensent in header');
     expect(res.setHeader.called).to.be.equal(true);
     expect(next.notCalled).to.be.equal(true);
+    config.isProduction.restore();
   });
   it('should return 403 if decoded token has no user_id', () => {
+    sinon.createSandbox().stub(config, 'isProduction').returns(true);
     const token = new Token({ exp: 0 });
     req.headers.authorization = token.encode(config.secret());
 
@@ -42,8 +46,10 @@ describe('Auth Token', () => {
     expect(json.getCall(0).args[0]).to.have.property('error', 'It is highly recommended to inform these fields: sub and exp');
     expect(res.setHeader.called).to.be.equal(true);
     expect(next.notCalled).to.be.equal(true);
+    config.isProduction.restore();
   });
   it('should return 403 if a token token was decoded with another secret', () => {
+    sinon.createSandbox().stub(config, 'isProduction').returns(true);
     const token = new Token({ sub: 'b36d21fe-123f-4258-86d4-ed063b74414c', exp: 0 });
     req.headers.Authorization = token.encode('another-secret');
 
@@ -55,8 +61,10 @@ describe('Auth Token', () => {
     expect(json.getCall(0).args[0]).to.have.property('error', 'Signature verification failed');
     expect(res.setHeader.called).to.be.equal(true);
     expect(next.notCalled).to.be.equal(true);
+    config.isProduction.restore();
   });
   it('req should have payload property', () => {
+    sinon.createSandbox().stub(config, 'isProduction').returns(true);
     const token = Token.builder()
       .sub('25e1a524-01eb-4c42-b3b2-86280c5e61ca')
       .payload({ company_id: 'a2aa43db-eecf-4a23-9492-b70f4e17323b' })
@@ -65,8 +73,10 @@ describe('Auth Token', () => {
 
     authToken()(req, res, next);
 
-    expect(req).to.have.property('payload');
-    expect(req.payload).to.have.property('user_id', '25e1a524-01eb-4c42-b3b2-86280c5e61ca');
-    expect(req.payload).to.have.property('company_id', 'a2aa43db-eecf-4a23-9492-b70f4e17323b');
+    expect(req).to.have.property('token');
+    expect(req.token).to.have.property('sub', '25e1a524-01eb-4c42-b3b2-86280c5e61ca');
+    expect(req.token).to.have.property('payload');
+    expect(req.token.payload).to.have.property('company_id', 'a2aa43db-eecf-4a23-9492-b70f4e17323b');
+    config.isProduction.restore();
   });
 });

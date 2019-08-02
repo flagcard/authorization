@@ -1,7 +1,7 @@
 const sandbox = require('sinon').createSandbox();
 const { assert } = require('chai');
-const config = require('../src/config');
-const { authorization } = require('../index');
+const config = require('../../src/config');
+const { authorization } = require('../..');
 
 describe('Authorization', () => {
   it('should return a function', () => {
