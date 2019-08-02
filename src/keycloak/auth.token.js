@@ -2,7 +2,7 @@ const Token = require('../builder/token');
 const forbidden = require('./forbidden');
 const config = require('../config');
 
-module.exports = () => (req, res, next) => {
+module.exports = (req, res, next) => {
   if (config.isProduction()) {
     const authorization = req.headers.authorization || req.headers.Authorization;
     if (authorization) {
@@ -23,5 +23,6 @@ module.exports = () => (req, res, next) => {
       iss: 'non-productive-issuer',
       aud: 'non-productive-dest',
     };
+    next();
   }
 };

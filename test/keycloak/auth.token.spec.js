@@ -23,7 +23,7 @@ describe('Auth Token', () => {
   it('should return 403 if no auth-token provider', () => {
     sinon.createSandbox().stub(config, 'isProduction').returns(true);
 
-    authToken()(req, res, next);
+    authToken(req, res, next);
 
     expect(res.status.called).to.be.equal(true);
     expect(res.status.getCall(0).args[0]).to.be.equal(403);
@@ -38,7 +38,7 @@ describe('Auth Token', () => {
     const token = new Token({ exp: 0 });
     req.headers.authorization = token.encode(config.secret());
 
-    authToken()(req, res, next);
+    authToken(req, res, next);
 
     expect(res.status.called).to.be.equal(true);
     expect(res.status.getCall(0).args[0]).to.be.equal(403);
@@ -53,7 +53,7 @@ describe('Auth Token', () => {
     const token = new Token({ sub: 'b36d21fe-123f-4258-86d4-ed063b74414c', exp: 0 });
     req.headers.Authorization = token.encode('another-secret');
 
-    authToken()(req, res, next);
+    authToken(req, res, next);
 
     expect(res.status.called).to.be.equal(true);
     expect(res.status.getCall(0).args[0]).to.be.equal(403);
@@ -71,7 +71,7 @@ describe('Auth Token', () => {
       .build();
     req.headers.Authorization = token.encode(config.secret());
 
-    authToken()(req, res, next);
+    authToken(req, res, next);
 
     expect(req).to.have.property('token');
     expect(req.token).to.have.property('sub', '25e1a524-01eb-4c42-b3b2-86280c5e61ca');
