@@ -7,9 +7,7 @@ module.exports = (req, res, next) => {
     const authorization = req.headers.authorization || req.headers.Authorization;
     if (authorization) {
       try {
-        const token = Token.decode(authorization, config.secret());
-        token.validate();
-        req.token = token;
+        req.token = Token.decode(authorization, config.secret());
         next();
       } catch (e) {
         forbidden(res, e.message);
