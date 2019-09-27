@@ -7,7 +7,7 @@ module.exports = (req, res, next) => {
     const authorization = req.headers.authorization || req.headers.Authorization;
     if (authorization) {
       try {
-        req.token = Token.decode(authorization, config.secret());
+        req.subject = Token.decode(authorization, config.secret()).sub;
         next();
       } catch (e) {
         forbidden(res, e.message);
@@ -16,11 +16,7 @@ module.exports = (req, res, next) => {
       forbidden(res, 'Authorization token is not prensent in header');
     }
   } else {
-    req.token = {
-      sub: 'e9fd456a-599c-4942-b249-fc457bb4b278',
-      iss: 'non-productive-issuer',
-      aud: 'non-productive-dest',
-    };
+    req.subject = 'e9fd456a-599c-4942-b249-fc457bb4b278';
     next();
   }
 };

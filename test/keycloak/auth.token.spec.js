@@ -1,4 +1,3 @@
-const moment = require('moment');
 const sinon = require('sinon');
 const jwt = require('jsonwebtoken');
 const { expect } = require('chai');
@@ -95,8 +94,7 @@ describe('Auth Token', () => {
 
     authToken(req, res, next);
 
-    expect(req).to.have.property('token');
-    expect(req.token).to.have.property('sub', '25e1a524-01eb-4c42-b3b2-86280c5e61ca');
+    expect(req).to.have.property('subject', '25e1a524-01eb-4c42-b3b2-86280c5e61ca');
     config.isProduction.restore();
   });
   it.skip('should decode properly a mjoinr token', () => {

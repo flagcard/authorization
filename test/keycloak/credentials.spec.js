@@ -20,12 +20,12 @@ describe('Credentials', () => {
   afterEach(() => {
     config.isProduction.restore();
   });
-  it('should return default user_id for a non production environment', () => {
+  it('should return default subject for a non production environment', () => {
     sandbox.stub(config, 'isProduction').returns(false);
 
     credentials()(req, {}, sinon.fake());
 
-    expect(req).to.have.property('user_id', 'e9fd456a-599c-4942-b249-fc457bb4b278');
+    expect(req).to.have.property('subject', 'e9fd456a-599c-4942-b249-fc457bb4b278');
   });
   it('should return forbidden for production without authorization', () => {
     sandbox.stub(config, 'isProduction').returns(true);
@@ -45,7 +45,7 @@ describe('Credentials', () => {
 
     credentials()(req, res, next);
 
-    expect(req.user_id).to.be.equal('f4ec897d-8428-4dde-ae81-18c9ddf2970f');
+    expect(req.subject).to.be.equal('f4ec897d-8428-4dde-ae81-18c9ddf2970f');
     expect(res.end.notCalled).to.be.equal(true);
     expect(res.setHeader.notCalled).to.be.equal(true);
     expect(next.called).to.be.equal(true);
