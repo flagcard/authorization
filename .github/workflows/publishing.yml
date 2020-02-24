@@ -26,6 +26,6 @@ jobs:
       - name: Create .npmrc
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
-        run: echo "//npm.pkg.github.com/:_authToken=$NODE_AUTH_TOKEN" >> ~/.npmrc
+        run: echo "//npm.pkg.github.com/:_authToken=$NODE_AUTH_TOKEN"
       - run: npm ci
       - run: npm publish
