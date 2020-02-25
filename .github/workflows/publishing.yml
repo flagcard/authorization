@@ -25,9 +25,12 @@ jobs:
           node-version: 12
           registry-url: https://npm.pkg.github.com/
           scope: '@dayvisonlemos'
-      - run: npm ci
-      - run: cat ~/.npmrc
+      - run: echo "//registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN" >> ~/.npmrc
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
       - run: npm config set registry https://npm.pkg.github.com/
+      - run: cat ~/.npmrc
+      - run: npm ci
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
