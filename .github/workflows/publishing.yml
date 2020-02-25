@@ -28,5 +28,4 @@ jobs:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
         run: echo "//npm.pkg.github.com/:_authToken=6706150d6df63789f7cb71e9d0a2bdbca38c8ead >> ~/.npmrc"
       - run: npm config set registry https://npm.pkg.github.com/
-      - run: npm ci
       - run: npm publish
