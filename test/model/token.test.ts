@@ -11,7 +11,7 @@ describe('Token', () => {
 
       const result = token.encode();
 
-      expect(result).toEqual('eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmNDZlMGNlMi1kY2Q2LTQxZjUtYmFkZS0wM2M2OGYzZjM4YWMiLCJpc3MiOiIiLCJhdWQiOiIiLCJpYXQiOjE1OTEwMjM2MDAsImV4cCI6MTU5MTAyMzYwNX0.LZ7b7eZbv6YDGoRD_lR53HX15AflalgX9A2uUvF_DlmGuEM_v1mvVyBXdwPivQCK7iuDvlhMonc4qwR5wN9csA');
+      expect(result).toEqual('eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmNDZlMGNlMi1kY2Q2LTQxZjUtYmFkZS0wM2M2OGYzZjM4YWMiLCJpc3MiOiIiLCJhdWQiOiIiLCJpYXQiOjE1OTEwMjM2MDAsImV4cCI6MTU5MTAyMzYwNX0.wKHLRZSSK3SfKQA51WmsX_RyH1aSaiEjh-qzGUTt6u_8ISeuCppa-JNxs3T376m9e1zeAxqh_KqEawHcnuvO-A');
     });
     it('should encode with required field with secret', () => {
       const token = Token.builder()

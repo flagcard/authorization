@@ -2,7 +2,6 @@ import sinon, { SinonSpy } from 'sinon';
 import { Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { addSeconds } from 'date-fns';
-import config, { secret } from '../../config';
 import authorization, { Request } from '../../src/api/authorization';
 import Token from '../../src/model/token';
 
@@ -11,13 +10,12 @@ describe('Auth Token', () => {
   req.headers = {};
   const res: Partial<Response> = {};
   const next: SinonSpy = sinon.fake();
-  sinon.createSandbox().stub(config, 'isProduction').returns(true);
   it('should return ForbiddenException if no auth-token provider', () => {
     expect(() => authorization(<Request>req, <Response>res, next))
       .toThrowError('Authorization token is not prensent in header');
   });
   it('should return ForbiddenException if decoded token has no user_id', () => {
-    const token = jwt.sign({}, secret(), { algorithm: 'HS512' });
+    const token = jwt.sign({}, Token.secret(), { algorithm: 'HS512' });
 
     const headers = {
       authorization: `Bearer ${token}`,

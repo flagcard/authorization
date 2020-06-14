@@ -2,7 +2,6 @@ import { ForbiddenException } from '@flagcard/exception';
 import jwt from 'jsonwebtoken';
 import TokenBuilder from './token.builder';
 import { TokenOptions } from './token.options';
-import { secret } from '../../config';
 
 const algorithm = 'HS512';
 
@@ -34,8 +33,13 @@ export default class Token {
     this.validate();
   }
 
+  public static secret(str?: string): string {
+    if (str) return str;
+    return process.env.AUTH_SECRET || 'default-secret';
+  }
+
   public static decode(token:string, passphrase?:string): Token {
-    const key = secret(passphrase);
+    const key = Token.secret(passphrase);
     let encoded = token;
     if (token.startsWith('Bearer')) {
       encoded = token.substring(7);
@@ -56,7 +60,7 @@ export default class Token {
         expiresIn = encodeOptions.expiresIn || 5;
       }
     }
-    const key = secret(passphrase);
+    const key = Token.secret(passphrase);
     const payload = {
       sub: this.subject,
       iss: this.issuer,
