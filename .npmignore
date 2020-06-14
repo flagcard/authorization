@@ -1,0 +1,9 @@
+tsconfig.json
+.editorconfig
+.eslintrc
+.idea
+src
+test
+index.ts
+!dist/src
+

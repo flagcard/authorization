@@ -1,7 +1,0 @@
-{
-  "realm": "flagcard",
-  "auth-server-url": "http://auth.flagcard.com.br/auth",
-  "ssl-required": "none",
-  "resource": "ragadast",
-  "public-client": true
-}
