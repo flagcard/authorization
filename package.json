@@ -48,7 +48,7 @@
     "@flagcard/log": "^2.1.9",
     "date-fns": "^2.14.0",
     "date-fns-tz": "^1.0.10",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "http-status": "^1.4.2",
     "jsonwebtoken": "^8.5.1"
   }
